@@ -1,6 +1,8 @@
 // import { paymasterUrl } from '../constants'
+const express = require('express');
+const app = express();
 
-export async function POST(r: Request) {
+app.post('/api/paymaster', async (r : Request) => {
   console.log('Running New Paymaster Proxy');
 
   try {
@@ -38,4 +40,5 @@ export async function POST(r: Request) {
     console.error('Error in POST function:', error);
     return new Response(JSON.stringify({ error: 'Failed to process request' }), { status: 500 });
   }
-}
+});
+
