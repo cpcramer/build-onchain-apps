@@ -3,10 +3,10 @@ import { useWriteContracts } from 'wagmi/experimental';
 import { CallStatus } from './CallStatus';
 import { Capabilities } from './Capabilities';
 
-// const deployUrl = process.env.BOAT_DEPLOY_URL ?? process.env.VERCEL_URL;
-// const defaultUrl = deployUrl
-//   ? `https://${deployUrl}`
-//   : `http://localhost:${process.env.PORT ?? 3000}`;
+const deployUrl = process.env.BOAT_DEPLOY_URL ?? process.env.VERCEL_URL;
+const defaultUrl = deployUrl
+  ? `https://${deployUrl}/new-paymaster-bundler/_components/NewPaymasterProxy`
+  : `https://api.developer.coinbase.com/rpc/v1/base-sepolia/z7inYI-NRNAOF9kgaW4Suf-30N6DuMra`;
 
 const abi = [
   {
@@ -23,6 +23,7 @@ export default function NewPaymasterBundlerDemo() {
   const { data: id, writeContracts } = useWriteContracts();
 
   const handleMint = async () => {
+    console.log("Default url: ", defaultUrl)
     console.log('account: ', account);
     if (account.address === undefined) {
       alert('You need to be signed in to mint an NFT.');
@@ -52,7 +53,7 @@ export default function NewPaymasterBundlerDemo() {
             // TODOs
             // Temp work around by calling our paymaster directly.
             // Proxy should work in dev, need to test.
-            url: `https://api.developer.coinbase.com/rpc/v1/base-sepolia/z7inYI-NRNAOF9kgaW4Suf-30N6DuMra`
+            url: defaultUrl
             // url: `${defaultUrl} + /api/paymaster`,
             // url: `${document.location.origin}/new-paymaster-bundler/_components/`;            
           },
@@ -72,15 +73,16 @@ return (
       <div style={{ fontSize: "16px", marginTop: "10px" }}>
         <strong>Status:</strong> {account.status}
         <br />
-        <strong>Addresses:</strong> {JSON.stringify(account.addresses)}
         <strong>Chain ID:</strong> {account.chainId}
+        <br />
+        <strong>Addresses:</strong> {JSON.stringify(account.addresses)}
         <br />
         <Capabilities />
         <br />
       </div>
     </div>
     <div>
-      <h2 style={{ borderBottom: "2px solid #ccc" }}>Mint an NFT using Coinbase Sponsored Smart Wallets</h2>
+      <h2 style={{ borderBottom: "2px solid #ccc" }}>Mint an NFT using Smart Wallets. Sponsored by Coinbase!</h2>
       <button
         type="button"
         style={{
@@ -101,6 +103,7 @@ return (
       >
         Mint NFT
       </button>
+      <br />
       {id && <CallStatus id={id} />}
       {id && (
         <div style={{ marginTop: "10px", fontSize: "16px" }}>
