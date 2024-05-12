@@ -4,7 +4,7 @@ import Banner from '@/components/layout/banner/banner';
 import Footer from '@/components/layout/footer/Footer';
 import Header from '@/components/layout/header/Header';
 import Main from '@/components/layout/Main';
-// import Guide from './_components/Guide';
+import NewGuide from './_components/NewGuide';
 import NewPaymasterBundlerApp from './_components/NewPaymasterBundlerApp';
 
 /**
@@ -18,7 +18,7 @@ export default function NewPaymasterBundlerPage() {
       <Main>
         <Banner pageName="New Paymaster Bundler" pageUrl="new-paymaster-bundler" wip />
         <NewPaymasterBundlerApp />
-        {/* <Guide /> */}
+        <NewGuide />
       </Main>
       <Footer />
     </>

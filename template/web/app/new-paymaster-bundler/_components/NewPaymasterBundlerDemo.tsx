@@ -1,10 +1,12 @@
 import { useAccount } from 'wagmi';
 import { useWriteContracts } from 'wagmi/experimental';
-// import { POST } from './NewPaymasterProxy';
-const deployUrl = process.env.BOAT_DEPLOY_URL ?? process.env.VERCEL_URL;
-const defaultUrl = deployUrl
-  ? `https://${deployUrl}`
-  : `http://localhost:${process.env.PORT ?? 3000}`;
+import { CallStatus } from './CallStatus';
+import { Capabilities } from './Capabilities';
+
+// const deployUrl = process.env.BOAT_DEPLOY_URL ?? process.env.VERCEL_URL;
+// const defaultUrl = deployUrl
+//   ? `https://${deployUrl}`
+//   : `http://localhost:${process.env.PORT ?? 3000}`;
 
 const abi = [
   {
@@ -22,12 +24,11 @@ export default function NewPaymasterBundlerDemo() {
 
   const handleMint = async () => {
     console.log('account: ', account);
-    if (account.address === undefined) { 
-        alert("You need to be signed in to mint an NFT.");
-        console.error('You need to be signed in to mint an NFT.');
-        return;
+    if (account.address === undefined) {
+      alert('You need to be signed in to mint an NFT.');
+      console.error('You need to be signed in to mint an NFT.');
+      return;
     }
-
 
     try {
       writeContracts({
@@ -38,37 +39,75 @@ export default function NewPaymasterBundlerDemo() {
             functionName: 'safeMint',
             args: [account.address],
           },
-          {
-            address: '0x119Ea671030FBf79AB93b436D2E20af6ea469a19',
-            abi,
-            functionName: 'safeMint',
-            args: [account.address],
-          },
+          // ,
+          // {
+          //   address: '0x119Ea671030FBf79AB93b436D2E20af6ea469a19',
+          //   abi,
+          //   functionName: 'safeMint',
+          //   args: [account.address],
+          // },
         ],
         capabilities: {
           paymasterService: {
-            url: defaultUrl, // The URL from your paymaster service provider, or your app's backend as described in step (2) above
+            // TODOs
+            // Temp work around by calling our paymaster directly.
+            // Proxy should work in dev, need to test.
+            url: `https://api.developer.coinbase.com/rpc/v1/base-sepolia/z7inYI-NRNAOF9kgaW4Suf-30N6DuMra`
+            // url: `${defaultUrl} + /api/paymaster`,
+            // url: `${document.location.origin}/new-paymaster-bundler/_components/`;            
           },
         },
       });
-      
-      console.log('Minting successful!');
+
+      console.log('Success writing contract!');
     } catch (error) {
-      console.error('Error minting NFT:', error);
+      console.error('Error writing contract: ', error);
     }
   };
 
-  return (
+return (
+  <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ marginBottom: "20px" }}>
+      <h2 style={{ borderBottom: "2px solid #ccc" }}>Account Details</h2>
+      <div style={{ fontSize: "16px", marginTop: "10px" }}>
+        <strong>Status:</strong> {account.status}
+        <br />
+        <strong>Addresses:</strong> {JSON.stringify(account.addresses)}
+        <strong>Chain ID:</strong> {account.chainId}
+        <br />
+        <Capabilities />
+        <br />
+      </div>
+    </div>
     <div>
-      <h2>New Paymaster Bundler Demo</h2>
+      <h2 style={{ borderBottom: "2px solid #ccc" }}>Mint an NFT using Coinbase Sponsored Smart Wallets</h2>
       <button
         type="button"
-        className="block w-full rounded-full border  bg-white py-4 text-black hover:bg-gray-800 hover:text-white"
+        style={{
+          display: "block",
+          width: "100%",
+          padding: "15px 0",
+          borderRadius: "30px",
+          border: "2px solid black",
+          backgroundColor: "white",
+          color: "black",
+          fontSize: "16px",
+          fontWeight: "bold",
+          cursor: "pointer",
+          marginTop: "10px"
+        }}
+        className="hover:bg-gray-800 hover:text-white"
         onClick={handleMint}
       >
         Mint NFT
       </button>
-      {id && <div> ID: {id}</div>}
+      {id && <CallStatus id={id} />}
+      {id && (
+        <div style={{ marginTop: "10px", fontSize: "16px" }}>
+          <strong>Transaction ID:</strong> {id}
+        </div>
+      )}
     </div>
-  );
+  </div>
+);
 }
