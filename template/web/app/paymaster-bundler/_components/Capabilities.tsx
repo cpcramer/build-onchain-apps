@@ -1,5 +1,5 @@
-import { useAccount } from "wagmi";
-import { useCapabilities } from "wagmi/experimental";
+import { useAccount } from 'wagmi';
+import { useCapabilities } from 'wagmi/experimental';
 
 /**
  * Capabilities component displays the capabilities of the current account.
@@ -12,9 +12,9 @@ export function Capabilities() {
 
   return (
     <div className="font-sans text-white">
-      <h2 className="text-white font-bold">Capabilities:</h2>
+      <h2 className="font-bold text-white">Capabilities:</h2>
       {capabilities ? (
-        <pre className="bg-gray-800 text-white p-2.5 rounded overflow-auto font-mono mt-2">
+        <pre className="mt-2 overflow-auto rounded bg-gray-800 p-2.5 font-mono text-white">
           {JSON.stringify(capabilities, null, 2)}
         </pre>
       ) : (
@@ -22,5 +22,4 @@ export function Capabilities() {
       )}
     </div>
   );
-} 
-  
+}

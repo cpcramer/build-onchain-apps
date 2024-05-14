@@ -1,4 +1,4 @@
-import { useCallsStatus } from "wagmi/experimental";
+import { useCallsStatus } from 'wagmi/experimental';
 
 /**
  * CallStatus fetches and displays the status of a writeContracts call.
@@ -11,10 +11,9 @@ export function CallStatus({ id }: { id: string }) {
   const { data: callsStatus } = useCallsStatus({
     id,
     query: {
-      refetchInterval: (data) =>
-        data.state.data?.status === "CONFIRMED" ? false : 1000,
+      refetchInterval: (data) => (data.state.data?.status === 'CONFIRMED' ? false : 1000),
     },
   });
 
-  return <div>Status: {callsStatus?.status || "loading"}</div>;
+  return <div>Status: {callsStatus?.status || 'loading'}</div>;
 }
